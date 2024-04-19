@@ -1,6 +1,6 @@
 <template>
   <header class="navbar">
-    <h1>I will be a navbar</h1>
+    <h1>BBC Good Food - Recipe suggestions</h1>
 
     <router-link to="/">Home</router-link>
     <router-link to="/Login">Login</router-link>
@@ -17,4 +17,22 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 1.5rem;
+  background: rgb(85, 97, 110);
+}
+
+.router-link-active {
+  color: black;
+  font-weight: bold;
+}
+.router-link {
+  text-decoration: none;
+  color: antiquewhite;
+}
+</style>
