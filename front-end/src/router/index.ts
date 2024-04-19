@@ -8,7 +8,7 @@ import ViewRecipesView from '@/views/ViewRecipesView.vue'
 
 const routes = [
   { path: '/', component: HomeView },
-  { path: '/login', component: LoginView },
+  { path: '/Login', component: LoginView },
   { path: '/SignUp', component: SignUpView },
   { path: '/Results', component: ResultsView },
   { path: '/AddRecipe', component: AddRecipeView },
