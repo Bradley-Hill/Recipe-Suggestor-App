@@ -8,6 +8,7 @@ import appNavbar from '../src/components/appNavbar.vue'
     <div class="wrapper">
       <!-- Your custom components will go here -->
       <appNavbar />
+      <RouterView />
     </div>
   </header>
 </template>

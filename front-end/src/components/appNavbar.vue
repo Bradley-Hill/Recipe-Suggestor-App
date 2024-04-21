@@ -1,6 +1,6 @@
 <template>
   <header class="navbar">
-    <h1>BBC Good Food - Recipe suggestions</h1>
+    <h1>BBC Good Food - Recipe Suggestions</h1>
 
     <router-link to="/">Home</router-link>
     <router-link to="/Login">Login</router-link>
