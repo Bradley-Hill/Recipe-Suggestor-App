@@ -1,12 +1,30 @@
 from myapp import app, mongo
 from flask import request, json
+from recipe_scrapers import scrape_me
 from bson.json_util import dumps
 
 
 @app.route("/add", methods=["POST"])
 def add_recipe():
-    # code to add recipe to mongoDB
-    pass
+    # Get URL from request body
+    url = request.json["url"]
+
+    # scrape the recipe
+    scraper = scrape_me(url)
+
+    # create dict to store recipe data
+    recipe = {
+        "name": scraper.title(),
+        "total_time": scraper.total_time(),
+        "image_url": scraper.image(),
+        "ingredients": scraper.ingredients(),
+        "instructions": scraper.instructions().split("\n"),
+    }
+
+    # Insert recipe to mongoDB collection
+    mongo.db.recipes.insert_one(recipe)
+
+    return "Recipe added successfully", 200
 
 
 @app.route("/search", methods=["POST"])
