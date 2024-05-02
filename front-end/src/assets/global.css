@@ -1,0 +1,42 @@
+/* Reset default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Apply a default font and font size */
+body {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+}
+
+/* Set a default background color */
+html,
+body {
+  background-color: #f5f5f5;
+}
+
+/* Add some spacing between elements */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+li {
+  margin-bottom: 10px;
+}
+
+/* Apply a default text color */
+p {
+  color: #333;
+}
+
+/* Add a border to images */
+img {
+  border: 1px solid #ccc;
+}
