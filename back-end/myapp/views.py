@@ -4,7 +4,7 @@ from recipe_scrapers import scrape_me
 from bson.json_util import dumps
 
 
-@app.route("/add", methods=["POST"])
+@app.route("/add_recipe", methods=["POST"])
 def add_recipe():
     # Get URL from request body
     url = request.json["url"]
