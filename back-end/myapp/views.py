@@ -1,12 +1,15 @@
 from myapp import app, mongo
-from flask import request, json
+from flask import request, json, abort
 from recipe_scrapers import scrape_me
 from bson.json_util import dumps
 
 
 @app.route("/add_recipe", methods=["POST"])
 def add_recipe():
+    if mongo.db is None:
+        abort(500, description="Database not initialised")
     # Get URL from request body
+    print("In add_recipe() mongo.db is: ", mongo.db)
     url = request.json["url"]
 
     # scrape the recipe
