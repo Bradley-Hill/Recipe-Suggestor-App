@@ -6,7 +6,7 @@ from recipe_scrapers import scrape_me
 @app.route("/")
 def index():
     db = current_app.config["db"]
-    recipes = db.recipes.find()
+    recipes = db.Recipes.find()
     for recipe in recipes:
         print(recipe)
     return "Check teh console for output"
