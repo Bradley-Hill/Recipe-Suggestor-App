@@ -20,7 +20,7 @@ export default {
   methods: {
     async addRecipe() {
       try {
-        const response = await axios.post('http://localhost:5000/add_recipe', { url: this.url })
+        const response = await axios.post('http://localhost:5000/add', { url: this.url })
         console.log(response.data)
         this.url = ''
       } catch (error) {

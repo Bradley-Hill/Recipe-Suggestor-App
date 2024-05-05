@@ -9,7 +9,7 @@ def index():
     recipes = db.Recipes.find()
     for recipe in recipes:
         print(recipe)
-    return "Check teh console for output"
+    return "Check the console for output"
 
 
 @app.route("/test")
@@ -23,11 +23,22 @@ def test():
     return jsonify(recipes_list)
 
 
+# @app.route("/add", methods=["OPTIONS"])
+# def options():
+#     response = app.make_default_options_response()
+
+#     response.headers["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
+#     response.headers["Access-Control-Allow-Headers"] = "*"
+#     response.headers["Access-Control-Allow-Origin"] = "*"
+
+#     return response
+
+
 @app.route("/add", methods=["POST"])
 def add_recipe():
     db = current_app.config["db"]
     # Get URL from request body
-    url = request.form.get("url")
+    url = request.json.get("url")
 
     # scrape the recipe
     scraper = scrape_me(url)
