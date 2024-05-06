@@ -1,7 +1,7 @@
 <template>
   <div class="recipe-card">
     <h2>{{ recipe.name }}</h2>
-    <img :="recipe.image_url" alt="Recipe Image" />
+    <img :src="recipe.image_url" alt="Recipe Image" />
     <!--  Add more structure for teh recipe info here -->
   </div>
 </template>

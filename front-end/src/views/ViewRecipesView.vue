@@ -27,6 +27,10 @@ export default {
       .get('http://localhost:5000/view_all')
       .then((response) => {
         this.recipes = response.data
+
+        this.recipes.forEach((recipe) => {
+          console.log(recipe._id)
+        })
       })
       .catch((error) => {
         console.error(error)
