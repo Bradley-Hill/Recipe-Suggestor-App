@@ -24,7 +24,7 @@ export default {
   },
   created() {
     axios
-      .get('http://localhost:5000/endpoint-here')
+      .get('http://localhost:5000/view_all')
       .then((response) => {
         this.recipes = response.data
       })
