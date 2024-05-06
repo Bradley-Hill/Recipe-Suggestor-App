@@ -25,10 +25,19 @@ export default {
   box-shadow: 2px 2px 6px 0 rgba(0, 0, 0, 0.2);
   margin: 1.25rem;
   border-radius: 0.5rem;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.recipe-card:hover {
+  transform: scale(1.05);
+  box-shadow: 4px 4px 10px 0 rgba(0, 0, 0, 0.2);
 }
 
 .recipe-card h2 {
   margin-bottom: 10px;
+  text-align: center;
 }
 
 .recipe-card img {

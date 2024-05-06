@@ -39,6 +39,8 @@ export default {
 
 <style scoped>
 .DisplayCard-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
+  grid-gap: 1rem;
 }
 </style>
