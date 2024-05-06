@@ -1,11 +1,13 @@
 <template>
   <div>
     <h1>View Recipes Page</h1>
-    <AppRecipeDisplayCard
-      v-for="recipe in recipes"
-      :key="recipe._id"
-      :recipe="recipe"
-    ></AppRecipeDisplayCard>
+    <div class="DisplayCard-container">
+      <AppRecipeDisplayCard
+        v-for="recipe in recipes"
+        :key="recipe._id"
+        :recipe="recipe"
+      ></AppRecipeDisplayCard>
+    </div>
   </div>
 </template>
 
@@ -39,4 +41,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.DisplayCard-container {
+  display: flex;
+}
+</style>

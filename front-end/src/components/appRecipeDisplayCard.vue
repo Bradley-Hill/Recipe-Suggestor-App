@@ -17,6 +17,8 @@ export default {
 
 <style scoped>
 .recipe-card {
+  display: flex;
+  flex-direction: column;
   width: 19rem;
   padding: 1.25rem;
   border: 1px solid #ccc;
