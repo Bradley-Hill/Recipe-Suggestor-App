@@ -1,4 +1,4 @@
-from flask import current_app, request, jsonify
+from flask import current_app, request, jsonify, make_response
 from myapp import app
 from recipe_scrapers import scrape_me
 
@@ -21,6 +21,19 @@ def test():
     for recipe in recipes_list:
         recipe["_id"] = str(recipe["_id"])
     return jsonify(recipes_list)
+
+
+@app.route("/view_all", methods=["GET"])
+def view_all():
+    try:
+        db = current_app.config["db"]
+        recipes = db.Recipes.find()
+        recipes_list = list(recipes)
+        for recipe in recipes_list:
+            recipe["_id"] = str(recipe["_id"])
+        return jsonify(recipes_list)
+    except Exception as e:
+        return make_response(jsonify(error=str(e)), 500)
 
 
 @app.route("/add", methods=["POST"])
