@@ -1,6 +1,7 @@
 from flask import current_app, request, jsonify, make_response
 from myapp import app
 from recipe_scrapers import scrape_me
+from bson.objectid import ObjectId
 
 
 @app.route("/")
@@ -59,6 +60,19 @@ def add_recipe():
     print(result.inserted_id)
 
     return "Recipe added successfully", 200
+
+
+@app.route("/delete_recipe", methods=["DELETE"])
+def delete_recipe():
+    db = current_app.config["db"]
+    recipe_id = request.json.get("_id")
+    recipe_id = ObjectId(recipe_id)
+
+    result = db.Recipes.delete_one({"_id": recipe_id})
+
+    if result.deleted_count == 0:
+        return make_response(jsonify(error="No recipe found with that _id"), 404)
+    return "Recipe deleted successfully", 200
 
 
 # @app.route("/search", methods=["POST"])
