@@ -3,14 +3,32 @@
     <h2>{{ recipe.name }}</h2>
     <img :src="recipe.image_url" alt="Recipe Image" />
     <!--  Add more structure for teh recipe info here -->
+    <button type="button" class="deleteBtn" v-on:click="deleteRecipe">Delete</button>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'appRecipeDisplayCard',
   props: {
     recipe: Object
+  },
+  methods: {
+    deleteRecipe() {
+      axios({
+        method: 'delete',
+        url: 'http://localhost:5000/delete_recipe',
+        data: { _id: this.recipe._id }
+      })
+        .then((response) => {
+          console.log(response.data)
+          this.$emit('recipeDeleted', this.recipe._id)
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    }
   }
 }
 </script>

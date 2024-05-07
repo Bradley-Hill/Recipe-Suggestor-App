@@ -6,6 +6,7 @@
         v-for="recipe in recipes"
         :key="recipe._id"
         :recipe="recipe"
+        @recipeDeleted="removeRecipe"
       ></AppRecipeDisplayCard>
     </div>
   </div>
@@ -22,6 +23,11 @@ export default {
   data() {
     return {
       recipes: []
+    }
+  },
+  methods: {
+    removeRecipe(recipeId) {
+      this.recipes = this.recipes.filter((recipe) => recipe._id !== recipeId)
     }
   },
   created() {
