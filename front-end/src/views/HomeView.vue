@@ -9,18 +9,12 @@
     </p>
 
     <!-- Your code goes here -->
-    <AppIngredientForm></AppIngredientForm>
   </div>
 </template>
 
 <script>
-import AppIngredientForm from '@/components/appIngredientForm.vue'
-
 export default {
-  name: 'HomeView',
-  components: {
-    AppIngredientForm
-  }
+  name: 'HomeView'
   // Your component logic goes here
 }
 </script>
