@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>View Recipes Page</h1>
-    <div class="DisplayCard-container">
+    <div class="DisplayCard-container" v-if="!loading">
       <AppRecipeDisplayCard
         v-for="recipe in recipes"
         :key="recipe._id"
@@ -22,7 +22,8 @@ export default {
   },
   data() {
     return {
-      recipes: []
+      recipes: [],
+      loading: true
     }
   },
   methods: {
@@ -35,9 +36,11 @@ export default {
       .get('http://localhost:5000/view_all')
       .then((response) => {
         this.recipes = response.data
+        this.loading = false
       })
       .catch((error) => {
         console.error(error)
+        this.loading = false
       })
   }
 }

@@ -1,36 +1,39 @@
 <template>
   <div class="recipe-card">
-    <h2>{{ recipe.name }}</h2>
-    <img :src="recipe.image_url" alt="Recipe Image" />
+    <h2>{{ typedRecipe.name }}</h2>
+    <img :src="typedRecipe.image_url" alt="Recipe Image" />
     <!--  Add more structure for teh recipe info here -->
-    <button type="button" class="deleteBtn" v-on:click="deleteRecipe">Delete</button>
+    <DeleteRecipeButton
+      :recipeId="typedRecipe._id"
+      @recipeDeleted="$emit('recipeDeleted', $event)"
+    />
   </div>
 </template>
 
-<script>
-import axios from 'axios'
-export default {
-  name: 'appRecipeDisplayCard',
-  props: {
-    recipe: Object
-  },
-  methods: {
-    deleteRecipe() {
-      axios({
-        method: 'delete',
-        url: 'http://localhost:5000/delete_recipe',
-        data: { _id: this.recipe._id }
-      })
-        .then((response) => {
-          console.log(response.data)
-          this.$emit('recipeDeleted', this.recipe._id)
-        })
-        .catch((error) => {
-          console.error(error)
-        })
-    }
-  }
+<script lang="ts">
+import { defineComponent, computed } from 'vue'
+import DeleteRecipeButton from './appDeleteRecipeButton.vue'
+
+interface Recipe {
+  name: string
+  image_url: string
+  _id: string
 }
+
+export default defineComponent({
+  name: 'appRecipeDisplayCard',
+  components: { DeleteRecipeButton },
+  props: {
+    recipe: {
+      type: Object as () => Recipe,
+      required: true
+    }
+  },
+  setup(props) {
+    const typedRecipe = computed(() => props.recipe as Recipe)
+    return { typedRecipe }
+  }
+})
 </script>
 
 <style scoped>
