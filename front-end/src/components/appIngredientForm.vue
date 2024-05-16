@@ -1,10 +1,12 @@
 <template>
   <div>
-    <input v-model="ingredient1" placeholder="Enter an ingredient" />
-    <input v-model="ingredient2" placeholder="Enter an ingredient" />
-    <input v-model="ingredient3" placeholder="Enter an ingredient" />
-    <input v-model="ingredient4" placeholder="Enter an ingredient" />
-    <button @click="searchRecipes">Search</button>
+    <form>
+      <input v-model="ingredient1" placeholder="Enter an ingredient" />
+      <input v-model="ingredient2" placeholder="Enter an ingredient" />
+      <input v-model="ingredient3" placeholder="Enter an ingredient" />
+      <input v-model="ingredient4" placeholder="Enter an ingredient" />
+      <button type="button" @submit.prevent="searchRecipes">Search</button>
+    </form>
     <ul>
       <li v-for="recipe in recipes" :key="recipe._id">{{ recipe.name }}</li>
     </ul>
@@ -38,8 +40,9 @@ export default {
 div {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   width: auto;
+  height: 10rem;
 }
 </style>
