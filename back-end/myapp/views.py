@@ -89,4 +89,5 @@ def search_recipe():
 
     found_recipes_json = json_util.dumps(found_recipes)
 
+    print(found_recipes_json)
     return found_recipes_json

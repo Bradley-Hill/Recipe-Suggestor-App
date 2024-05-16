@@ -30,14 +30,18 @@ export default {
     async searchRecipes() {
       const ingredients = [this.ingredient1, this.ingredient2, this.ingredient3, this.ingredient4]
       const response = await axios.post('/search', { ingredients })
-      this.recipes = response.data
+      if (response.data.length === 0) {
+        this.recipes = 'No Matching Recipes Found'
+      } else {
+        this.recipes = response.data
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-div {
+form {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
