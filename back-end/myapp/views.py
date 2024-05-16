@@ -1,7 +1,7 @@
 from flask import current_app, request, jsonify, make_response
 from myapp import app
 from recipe_scrapers import scrape_me
-from bson.objectid import ObjectId
+from bson import ObjectId, json_util
 
 
 @app.route("/")
@@ -75,23 +75,18 @@ def delete_recipe():
     return "Recipe deleted successfully", 200
 
 
-# @app.route("/search", methods=["POST"])
-# def search_recipe():
-#     # Parse teh request body
-#     ingredients = request.json["ingredients"]
+@app.route("/search", methods=["POST"])
+def search_recipe():
+    db = current_app.config["db"]
+    # Parse teh request body
+    ingredients = request.json["ingredients"]
+    # create the query for MongoDB
+    query = {"ingredients": {"$in": ingredients}}
+    # execute teh query
+    cursor = db.Recipes.find(query)
+    # List of recipes from query
+    found_recipes = list(cursor)
 
-#     # Database query
-#     recipes = mongo.db.recipes.find()
+    found_recipes_json = json_util.dumps(found_recipes)
 
-#     # Convert query result to list of dicts
-#     recipes_list = [
-#         recipe
-#         for recipe in recipes
-#         if any(
-#             ingredient in json.loads(recipe["ingredients"])
-#             for ingredient in ingredients
-#         )
-#     ]
-
-#     # s Send teh response
-#     return dumps(recipes_list), 200
+    return found_recipes_json
