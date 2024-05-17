@@ -5,9 +5,10 @@
       <input v-model="ingredient2" placeholder="Enter an ingredient" />
       <input v-model="ingredient3" placeholder="Enter an ingredient" />
       <input v-model="ingredient4" placeholder="Enter an ingredient" />
-      <button type="button" @submit.prevent="searchRecipes">Search</button>
+      <button type="button" @click="searchRecipes">Search</button>
     </form>
     <ul>
+      <li v-if="typeof recipes === 'string'">{{ recipes }}</li>
       <li v-for="recipe in recipes" :key="recipe._id">{{ recipe.name }}</li>
     </ul>
   </div>
@@ -28,8 +29,15 @@ export default {
   },
   methods: {
     async searchRecipes() {
-      const ingredients = [this.ingredient1, this.ingredient2, this.ingredient3, this.ingredient4]
-      const response = await axios.post('/search', { ingredients })
+      const ingredients = [
+        this.ingredient1,
+        this.ingredient2,
+        this.ingredient3,
+        this.ingredient4
+      ].filter(Boolean)
+      const response = await axios.post('http://localhost:5000/search', {
+        ingredients
+      })
       if (response.data.length === 0) {
         this.recipes = 'No Matching Recipes Found'
       } else {

@@ -81,7 +81,8 @@ def search_recipe():
     # Parse teh request body
     ingredients = request.json["ingredients"]
     # create the query for MongoDB
-    query = {"ingredients": {"$in": ingredients}}
+    #
+    query = {"$text": {"$search": " ".join(ingredients)}}
     # execute teh query
     cursor = db.Recipes.find(query)
     # List of recipes from query
@@ -89,5 +90,4 @@ def search_recipe():
 
     found_recipes_json = json_util.dumps(found_recipes)
 
-    print(found_recipes_json)
     return found_recipes_json
