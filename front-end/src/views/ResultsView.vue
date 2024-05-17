@@ -5,6 +5,7 @@
   <div class="searchForm">
     <AppIngredientForm></AppIngredientForm>
   </div>
+  <div class="recipeDisplayContainer"></div>
 </template>
 
 <script>
