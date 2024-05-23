@@ -6,6 +6,7 @@ click==8.1.7
 dnspython==2.6.1
 extruct==0.16.0
 flask==3.0.3
+flask-cors
 Flask-PyMongo==2.3.0
 html-text==0.6.1
 html5lib==1.1
@@ -22,6 +23,7 @@ mf2py==2.0.1
 pymongo==4.7.0
 pyparsing==3.1.2
 pyRdfa3==3.6.2
+python-dotenv
 rdflib==7.0.0
 recipe-scrapers==14.56.0
 requests==2.31.0

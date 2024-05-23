@@ -2,12 +2,16 @@ from flask import Flask
 from pymongo import MongoClient
 from pymongo import TEXT
 from flask_cors import CORS
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 print("MongDB client init...")
 app = Flask(__name__)
 CORS(app)
 
-mongo_connection_str = "mongodb+srv://bradleyhill:YDBJrnsC7CG8WzXg@testrecipesuggestions.mtjmyrr.mongodb.net/?retryWrites=true&w=majority&appName=testRecipeSuggestions"
+mongo_connection_str = os.getenv("MONGO_CONNECTION_STR")
 client = MongoClient(mongo_connection_str)
 
 db = client["testRecipeSuggestions"]
