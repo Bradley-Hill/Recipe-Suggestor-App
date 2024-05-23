@@ -4,26 +4,6 @@ from recipe_scrapers import scrape_me
 from bson import ObjectId, json_util
 
 
-@app.route("/")
-def index():
-    db = current_app.config["db"]
-    recipes = db.Recipes.find()
-    for recipe in recipes:
-        print(recipe)
-    return "Check the console for output"
-
-
-@app.route("/test")
-def test():
-    db = current_app.config["db"]
-    print(f"Connected to database: {db.name}")
-    recipes = db.Recipes.find()
-    recipes_list = list(recipes)
-    for recipe in recipes_list:
-        recipe["_id"] = str(recipe["_id"])
-    return jsonify(recipes_list)
-
-
 @app.route("/view_all", methods=["GET"])
 def view_all():
     try:
