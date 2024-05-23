@@ -23,4 +23,4 @@ if not any(index["name"] == "ingredients_text" for index in indexes):
 
 app.config["db"] = db
 
-import myapp.views
+import myapp.recipe_routes
