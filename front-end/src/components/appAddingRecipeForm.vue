@@ -21,7 +21,7 @@ export default {
     async addRecipe() {
       console.log('addRecipe method called')
       try {
-        const response = await axios.post(`http://localhost:5000/add`, {
+        const response = await axios.post(`${import.meta.env.VITE_VUE_APP_BASE_API_URL}/add`, {
           url: this.url
         })
         console.log(response.data)

@@ -35,7 +35,7 @@ export default {
         this.ingredient3,
         this.ingredient4
       ].filter(Boolean)
-      const response = await axios.post('http://localhost:5000/search', {
+      const response = await axios.post(`${import.meta.env.VITE_VUE_APP_BASE_API_URL}/search`, {
         ingredients
       })
       if (response.data.length === 0) {

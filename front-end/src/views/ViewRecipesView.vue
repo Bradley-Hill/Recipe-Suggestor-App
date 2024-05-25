@@ -33,7 +33,7 @@ export default {
   },
   created() {
     axios
-      .get('http://localhost:5000/view_all')
+      .get(`${import.meta.env.VITE_VUE_APP_BASE_API_URL}/view_all`)
       .then((response) => {
         this.recipes = response.data
         this.loading = false
