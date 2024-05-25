@@ -52,6 +52,7 @@ const password = ref('')
 const confirmPassword = ref('')
 const passwordError = ref('')
 const emailError = ref('')
+const successMessage = ref('')
 
 const validateEmail = (email: string) => {
   const regex =
@@ -98,6 +99,7 @@ const createUser = async () => {
       password: password.value,
       confirmPassword: confirmPassword.value
     })
+    successMessage.value = 'User created successfully'
   } catch (error) {
     console.error(error)
   }
