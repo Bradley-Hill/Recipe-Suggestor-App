@@ -37,7 +37,7 @@
       />
       <p v-if="passwordError" aria-live="polite">{{ passwordError }}</p>
     </fieldset>
-    <button type="submit">Create User</button>
+    <button :disabled="isLoading" type="submit">Create User</button>
   </form>
   <p v-if="successMessage" aria-live="polite">{{ successMessage }}</p>
 </template>
@@ -54,6 +54,7 @@ const password = ref('')
 const confirmPassword = ref('')
 const passwordError = ref('')
 const emailError = ref('')
+const isLoading = ref(false)
 const successMessage = ref('')
 const router = useRouter()
 
@@ -96,6 +97,7 @@ watch(confirmPassword, () => {
 
 const createUser = async () => {
   try {
+    isLoading.value = true
     const response = await axios.post(`http://localhost:5000/createUser`, {
       username: username.value,
       email: email.value,
@@ -104,6 +106,10 @@ const createUser = async () => {
     })
 
     if (response.status === 200) {
+      username.value = ''
+      email.value = ''
+      password.value = ''
+      confirmPassword.value = ''
       successMessage.value = 'User created successfully'
       setTimeout(() => {
         router.push('/Login')
@@ -113,6 +119,8 @@ const createUser = async () => {
     }
   } catch (error) {
     console.error(error)
+  } finally {
+    isLoading.value = false
   }
 }
 </script>
