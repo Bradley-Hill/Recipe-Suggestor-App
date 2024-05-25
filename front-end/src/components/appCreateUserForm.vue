@@ -39,10 +39,12 @@
     </fieldset>
     <button type="submit">Create User</button>
   </form>
+  <p v-if="successMessage" aria-live="polite">{{ successMessage }}</p>
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import axios from 'axios'
 
 const username = ref('')
@@ -53,6 +55,7 @@ const confirmPassword = ref('')
 const passwordError = ref('')
 const emailError = ref('')
 const successMessage = ref('')
+const router = useRouter()
 
 const validateEmail = (email: string) => {
   const regex =
@@ -99,7 +102,15 @@ const createUser = async () => {
       password: password.value,
       confirmPassword: confirmPassword.value
     })
-    successMessage.value = 'User created successfully'
+
+    if (response.status === 200) {
+      successMessage.value = 'User created successfully'
+      setTimeout(() => {
+        router.push('/Login')
+      }, 2000)
+    } else {
+      successMessage.value = 'Failed to create new User'
+    }
   } catch (error) {
     console.error(error)
   }
