@@ -7,10 +7,10 @@
       <input v-model="ingredient4" placeholder="Enter an ingredient" />
       <button type="button" @click="searchRecipes">Search</button>
     </form>
-    <ul>
+    <!-- <ul>
       <li v-if="typeof recipes === 'string'">{{ recipes }}</li>
       <li v-for="recipe in recipes" :key="recipe._id">{{ recipe.name }}</li>
-    </ul>
+    </ul> -->
   </div>
 </template>
 
@@ -23,8 +23,8 @@ export default {
       ingredient1: '',
       ingredient2: '',
       ingredient3: '',
-      ingredient4: '',
-      recipes: []
+      ingredient4: ''
+      // recipes: []
     }
   },
   methods: {
@@ -41,7 +41,7 @@ export default {
       if (response.data.length === 0) {
         this.recipes = 'No Matching Recipes Found'
       } else {
-        this.recipes = response.data
+        this.$emit('search-results', response.data)
       }
     }
   }
