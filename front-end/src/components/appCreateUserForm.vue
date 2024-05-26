@@ -81,15 +81,19 @@ watch(email, () => {
 
 watch(password, () => {
   if (!validatePasswordLength(password.value)) {
-    passwordError.value = 'Password must be at least 8 characters long'
+    passwordError.value = 'Passwords must be at least 8 characters long'
+  } else if (confirmPassword.value !== password.value) {
+    passwordError.value = 'Passwords do not match'
   } else {
     passwordError.value = ''
   }
 })
 
 watch(confirmPassword, () => {
-  if (confirmPassword.value !== password.value) {
-    passwordError.value = 'Passwords do not match.'
+  if (!validatePasswordLength(password.value)) {
+    passwordError.value = 'Passwords must be at least 8 characters in length.'
+  } else if (confirmPassword.value !== password.value) {
+    passwordError.value = 'Passwords do not match'
   } else {
     passwordError.value = ''
   }
