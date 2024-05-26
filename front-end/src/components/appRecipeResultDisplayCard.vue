@@ -3,21 +3,16 @@
     <h2>{{ typedRecipe.name }}</h2>
     <img :src="typedRecipe.image_url" alt="Recipe Image" />
     <!--  Add more structure for teh recipe info here -->
-    <DeleteRecipeButton
-      :recipeId="typedRecipe._id"
-      @recipeDeleted="$emit('recipeDeleted', $event)"
-    />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import DeleteRecipeButton from './appDeleteRecipeButton.vue'
 import type { Recipe } from '@/interfaces/Recipe'
 
 export default defineComponent({
-  name: 'appRecipeDisplayCard',
-  components: { DeleteRecipeButton },
+  name: 'appRecipeResultDisplayCard',
+  components: {},
   props: {
     recipe: {
       type: Object as () => Recipe,
