@@ -7,23 +7,23 @@
   </div>
   <div class="recipeDisplayContainer">
     <p v-if="noResults">No recipes found</p>
-    <appRecipeDisplayCard
+    <appRecipeResultDisplayCard
       v-else
       v-for="recipe in recipes"
       :key="recipe._id"
       :recipe="recipe"
-    ></appRecipeDisplayCard>
+    ></appRecipeResultDisplayCard>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import AppIngredientForm from '@/components/appIngredientForm.vue'
-import appRecipeDisplayCard from '@/components/appRecipeDisplayCard.vue'
+import appRecipeResultDisplayCard from '@/components/appRecipeResultDisplayCard.vue'
 import type { Recipe } from '@/interfaces/Recipe'
 export default defineComponent({
   name: 'ResultsView',
-  components: { AppIngredientForm, appRecipeDisplayCard },
+  components: { AppIngredientForm, appRecipeResultDisplayCard },
   data(): { recipes: Recipe[]; noResults: boolean } {
     return { recipes: [], noResults: false }
   },
