@@ -1,9 +1,35 @@
 <template>
-  <div class="card-container" :class="{ flip: isFlipped }" @click="isFlipped = !isFlipped">
+  <div
+    class="card-container"
+    :class="{ flip: isFlipped, expanded: isExpanded }"
+    @click="isFlipped = !isFlipped"
+  >
     <div class="front-card">
       <h2>{{ typedRecipe.name }}</h2>
       <img :src="typedRecipe.image_url" alt="Recipe Image" />
+      <h3>Time to cook : {{ typedRecipe.total_time }} minutes.</h3>
       <!--  Add more structure for teh recipe info here -->
+      <div v-if="isExpanded" class="expanded-content">
+        <div class="ingredients">
+          <h3>Ingredients</h3>
+          <ul>
+            <li v-for="(ingredients, index) in typedRecipe.ingredients" :key="index">
+              {{ ingredients }}
+            </li>
+          </ul>
+        </div>
+        <div class="instructions">
+          <ul>
+            <li v-for="(instructions, index) in typedRecipe.instructions" :key="index">
+              {{ instructions }}
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <button @click.stop="isExpanded = !isExpanded">
+        {{ isExpanded ? 'Show less' : 'Show more' }}
+      </button>
     </div>
     <div class="back-card">
       <h2>{{ typedRecipe.name }}</h2>
@@ -33,7 +59,8 @@ export default defineComponent({
   setup(props) {
     const typedRecipe = computed(() => props.recipe as Recipe)
     const isFlipped = ref(false)
-    return { typedRecipe, isFlipped }
+    const isExpanded = ref(false)
+    return { typedRecipe, isFlipped, isExpanded }
   }
 })
 </script>
@@ -45,7 +72,25 @@ export default defineComponent({
   height: 350px;
   perspective: 1000px;
   backface-visibility: hidden;
+  transition: transform 0.3s ease-in-out;
 }
+
+.card-container.expanded {
+  transform: scale(1.2);
+  z-index: 1000;
+  position: fixed;
+  top: 10%;
+  left: 10%;
+  width: 70%;
+  height: 70vh;
+  z-index: 1000;
+  border-radius: 0;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  background: whitesmoke;
+}
+
 .front-card,
 .back-card {
   position: absolute;
@@ -70,6 +115,10 @@ export default defineComponent({
   width: 100%;
   height: 100%;
 }
+.back-card ul {
+  max-height: 300px;
+  overflow-y: hidden;
+}
 .card-container.flip .front-card {
   transform: rotateY(180deg);
 }
@@ -90,7 +139,19 @@ export default defineComponent({
 .front-card img {
   width: 100%;
   height: 100%;
+  max-height: 200px;
   border-radius: 0.5rem;
   object-fit: cover;
+}
+
+.expanded-content {
+  overflow-y: auto;
+  display: flex;
+}
+
+.expanded-content .ingredients,
+.expanded-content .instructions {
+  flex: 1;
+  overflow: auto;
 }
 </style>
