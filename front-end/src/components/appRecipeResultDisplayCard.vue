@@ -182,6 +182,9 @@ export default defineComponent({
 
 .card-container.expanded .front-card,
 .card-container.expanded .back-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin: 0;
   height: 100%;
 }
