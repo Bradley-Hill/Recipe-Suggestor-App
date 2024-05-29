@@ -2,9 +2,9 @@
   <div
     class="card-container"
     :class="{ flip: isFlipped, expanded: isExpanded }"
-    @click="isFlipped = !isFlipped"
+    @click="handleClick"
   >
-    <div class="front-card">
+    <div class="front-card" :class="{ 'no-hover': isExpanded }">
       <h2>{{ typedRecipe.name }}</h2>
       <img :src="typedRecipe.image_url" alt="Recipe Image" />
       <h3>Time to cook : {{ typedRecipe.total_time }} minutes.</h3>
@@ -61,11 +61,24 @@ export default defineComponent({
     const isFlipped = ref(false)
     const isExpanded = ref(false)
     return { typedRecipe, isFlipped, isExpanded }
+  },
+  methods: {
+    handleClick() {
+      if (!this.isExpanded) {
+        this.isFlipped = !this.isFlipped
+      }
+    }
   }
 })
 </script>
 
 <style scoped>
+.card-container,
+.front-card,
+.back-card {
+  box-sizing: border-box;
+}
+
 .card-container {
   position: relative;
   width: 19rem;
@@ -84,10 +97,12 @@ export default defineComponent({
   width: 70%;
   height: 70vh;
   z-index: 1000;
-  border-radius: 0;
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+  box-shadow: 2px 2px 6px 0 rgba(0, 0, 0, 0.2);
   margin: 0;
   padding: 0;
-  overflow: auto;
+  overflow: hidden;
   background: whitesmoke;
 }
 
@@ -107,6 +122,11 @@ export default defineComponent({
   transition:
     transform 0.3s ease,
     box-shadow 0.3s ease;
+}
+
+.front-card.no-hover:hover {
+  transform: none;
+  box-shadow: none;
 }
 
 .back-card {
@@ -140,11 +160,16 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   max-height: 200px;
+  max-width: 200px;
   border-radius: 0.5rem;
   object-fit: cover;
 }
 
 .expanded-content {
+  display: flex;
+  padding: 1rem;
+  margin: 1rem;
+  font-size: 1rem;
   overflow-y: auto;
   display: flex;
 }
@@ -153,5 +178,11 @@ export default defineComponent({
 .expanded-content .instructions {
   flex: 1;
   overflow: auto;
+}
+
+.card-container.expanded .front-card,
+.card-container.expanded .back-card {
+  margin: 0;
+  height: 100%;
 }
 </style>
