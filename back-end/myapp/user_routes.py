@@ -1,5 +1,6 @@
 # User and login/auth routes to be kept here
 import re
+from html import escape
 from flask import current_app, request, jsonify, make_response
 from myapp import app
 
@@ -11,6 +12,11 @@ def create_user():
         email = request.json.get("email")
         password = request.json.get("password")
         confirm_password = request.json.get("confirmPassword")
+        #Trimming the whitespace and sanitising the input
+        username = escape(username.strip())
+        email = escape(email.strip())
+        password = escape(password.strip())
+        confirm_password = escape(confirm_password.strip())
         # Data Validation
         if password != confirm_password:
             return make_response(jsonify(error="Passwords do not match"), 400)
