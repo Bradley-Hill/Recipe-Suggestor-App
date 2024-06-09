@@ -24,3 +24,4 @@ if not any(index["name"] == "ingredients_text" for index in indexes):
 app.config["db"] = db
 
 import myapp.recipe_routes
+import myapp.user_routes

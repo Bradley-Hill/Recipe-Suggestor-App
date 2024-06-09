@@ -102,7 +102,7 @@ watch(confirmPassword, () => {
 const createUser = async () => {
   try {
     isLoading.value = true
-    const response = await axios.post(`http://localhost:5000/createUser`, {
+    const response = await axios.post(`${import.meta.env.VITE_VUE_APP_BASE_API_URL}/createUser`, {
       username: username.value,
       email: email.value,
       password: password.value,

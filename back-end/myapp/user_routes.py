@@ -1,5 +1,7 @@
 # User and login/auth routes to be kept here
 import re
+import bcrypt
+from pymongo.errors import PyMongoError
 from html import escape
 from flask import current_app, request, jsonify, make_response
 from myapp import app
@@ -18,14 +20,23 @@ def create_user():
         password = escape(password.strip())
         confirm_password = escape(confirm_password.strip())
         # Data Validation
-        if password != confirm_password:
-            return make_response(jsonify(error="Passwords do not match"), 400)
-        if db.Users.find({"email": email}).count() > 0:
-            return make_response(jsonify(error="Email already exists"), 400)
         if username == "" or email == "" or password == "":
             return make_response(jsonify(error="All fields are required"), 400)
+        if password != confirm_password:
+            return make_response(jsonify(error="Passwords do not match"), 400)
+        if db.Users.count_documents({"email":email}) > 0:
+            return make_response(jsonify(error="Email already in use"), 400)
+        if db.Users.count_documents({"username":username}) > 0:
+            return make_response(jsonify(error="Username already in use"), 400)
         if len(password) < 8:
             return make_response(jsonify(error="Password must be at least 8 characters"), 400)
-        match = re.match(r"[^@]+@[^@]+\.[^@]+", email)
+        match = re.match(r"^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$", email)
         if match is None:
             return make_response(jsonify(error="Invalid email"), 400)
+        # Hashing the password
+        password_hash = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+        # Inserting the User into MongDB
+        result = db.Users.insert_one({"username": username, "email": email, "password": password_hash})
+        return "User created successfully", 200
+    except PyMongoError as e:
+        return make_response(jsonify(error=str(e)), 500)
