@@ -1,10 +1,17 @@
 # User and login/auth routes to be kept here
 import re
 import bcrypt
+import jwt
+import datetime
+import os
+from dotenv import load_dotenv
 from pymongo.errors import PyMongoError
 from html import escape
 from flask import current_app, request, jsonify, make_response
 from myapp import app
+
+load_dotenv()
+secret_key = os.getenv("SECRET_KEY")
 
 @app.route("/createUser", methods=["POST"])
 def create_user():
@@ -39,4 +46,31 @@ def create_user():
         result = db.Users.insert_one({"username": username, "email": email, "password": password_hash})
         return "User created successfully", 200
     except PyMongoError as e:
+        return make_response(jsonify(error=str(e)), 500)
+
+@app.route("/login",methods=["POST"])
+def login_user():
+    try:
+        db = current_app.config["db"]
+        db_users = db["Users"]
+        username = request.json.get("username")
+        password = request.json.get("password")
+        username = username.strip()
+        password = password.strip()
+        # Data Validation
+        user = db_users.find_one({"username":username})
+        if user is None:
+            return make_response(jsonify(error="Username not found"), 404)
+        else:
+            stored_password = user["password"]
+            if bcrypt.checkpw(password.encode("utf-8"), stored_password.encode("utf-8")):
+                #Create JWT for user
+                token = jwt.encode({
+                    "user_id": str(user["_id"]),
+                    "expires": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
+                },secret_key)
+                return make_response(jsonify(success="Logged In successfully"), 200)
+            else:
+                return make_response(jsonify(error="Invalid Password"), 401)
+    except Exception as e:
         return make_response(jsonify(error=str(e)), 500)
