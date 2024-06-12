@@ -69,7 +69,7 @@ def login_user():
                     "user_id": str(user["_id"]),
                     "expires": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
                 },secret_key)
-                return make_response(jsonify(success="Logged In successfully"), 200)
+                return make_response(jsonify(success="Logged In successfully", token=token.decode("UTF-8")), 200)
             else:
                 return make_response(jsonify(error="Invalid Password"), 401)
     except Exception as e:

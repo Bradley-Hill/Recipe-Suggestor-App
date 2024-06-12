@@ -30,7 +30,12 @@ export default defineComponent({
                     username: this.username,
                     password: this.password
                 });
+                if(response.data.success){
+                    window.localStorage.setItem("token", response.data.token);
                 // Update the page to confirm the user is logged in
+                } else {
+                    console.error("Error: ", response.data.error)
+                }
             } catch (error) {
                 console.error('Failed to login',error);
             }
