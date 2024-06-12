@@ -68,7 +68,7 @@ def login_user():
                 token = jwt.encode({
                     "user_id": str(user["_id"]),
                     "expires": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
-                },secret_key)
+                },secret_key, algorithm="HS256")
                 return make_response(jsonify(success="Logged In successfully", token=token.decode("UTF-8")), 200)
             else:
                 return make_response(jsonify(error="Invalid Password"), 401)

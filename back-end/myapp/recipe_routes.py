@@ -1,14 +1,22 @@
-from flask import current_app, request, jsonify, make_response
-from myapp import app
-from recipe_scrapers import scrape_me
+# Standard library imports
 from bson import ObjectId, json_util
 from bson.errors import InvalidId
+
+# Third party imports
+from flask import current_app, request, jsonify, make_response
+from jwt import InvalidTokenError, ExpiredSignatureError
 from pymongo.errors import PyMongoError
+from recipe_scrapers import scrape_me
+
+# Local application imports
+from myapp import app
+import jwt
 
 
 @app.route("/view_all", methods=["GET"])
 def view_all():
     try:
+
         db = current_app.config["db"]
         recipes = db.Recipes.find()
         recipes_list = list(recipes)
@@ -22,6 +30,15 @@ def view_all():
 @app.route("/add", methods=["POST"])
 def add_recipe():
     try:
+        if "Authorization" not in request.headers:
+            return make_response(jsonify(error="Missing Authorization header"), 401)
+        try:
+            decoded_jwt = jwt.decode(request.headers["Authorization"], current_app.config["SECRET_KEY"], algorithms=["HS256"])
+        except InvalidTokenError:
+            return make_response(jsonify(error="Invalid token"), 401)
+        except ExpiredSignatureError:
+            return make_response(jsonify(error="Token has expired"), 401)
+        
         db = current_app.config["db"]
         # Get URL from request body
         url = request.json.get("url")
@@ -36,11 +53,23 @@ def add_recipe():
             "image_url": scraper.image(),
             "ingredients": scraper.ingredients(),
             "instructions": scraper.instructions().split("\n"),
+            "users_added": [decoded_jwt["username"]],
         }
 
-        # Insert recipe to mongoDB collection
-        result = db.Recipes.insert_one(recipe)
-        return "Recipe added succesfully", 200
+        # Check if recipe already exists
+        existing_recipe = db.Recipes.find_one({"name": recipe["name"]})
+
+        if existing_recipe:
+            db.Recipes.update_one(
+                {"_id": existing_recipe["_id"]},
+                {"$addToSet":{"users_added": decoded_jwt["user_id"]}}
+            )
+            return "User added to existing recipe", 200
+        else:
+            # Insert recipe to mongoDB collection
+            recipe[]
+            result = db.Recipes.insert_one(recipe)
+            return "Recipe added succesfully", 200
     except TypeError:
         return make_response(jsonify(error="Invalid request body"), 400)
     except InvalidId:
