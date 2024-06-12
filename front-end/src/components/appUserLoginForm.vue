@@ -1,5 +1,5 @@
 <template>
-    <form @submmit.prevent="handleSubmit">
+    <form @submit.prevent="handleSubmit">
         <fieldset>
         <label for="Username">Username : 
             <input type="text" id="Username" v-model="username" required>

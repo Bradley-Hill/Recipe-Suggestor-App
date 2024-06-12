@@ -9,6 +9,7 @@ from pymongo.errors import PyMongoError
 from html import escape
 from flask import current_app, request, jsonify, make_response
 from myapp import app
+import logging
 
 load_dotenv()
 secret_key = os.getenv("SECRET_KEY")
@@ -63,14 +64,16 @@ def login_user():
             return make_response(jsonify(error="Username not found"), 404)
         else:
             stored_password = user["password"]
-            if bcrypt.checkpw(password.encode("utf-8"), stored_password.encode("utf-8")):
+            password = password.encode("utf-8")
+            if bcrypt.checkpw(password, stored_password):
                 #Create JWT for user
                 token = jwt.encode({
                     "user_id": str(user["_id"]),
-                    "expires": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
+                    "expires": (datetime.datetime.utcnow() + datetime.timedelta(minutes=30)).isoformat()
                 },secret_key, algorithm="HS256")
-                return make_response(jsonify(success="Logged In successfully", token=token.decode("UTF-8")), 200)
+                return make_response(jsonify(success="Logged In successfully", token=token), 200)
             else:
                 return make_response(jsonify(error="Invalid Password"), 401)
     except Exception as e:
+        logging.error(str(e))
         return make_response(jsonify(error=str(e)), 500)

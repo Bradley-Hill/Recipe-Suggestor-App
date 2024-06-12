@@ -67,8 +67,8 @@ def add_recipe():
             return "User added to existing recipe", 200
         else:
             # Insert recipe to mongoDB collection
-            recipe[]
-            result = db.Recipes.insert_one(recipe)
+            recipe["users_added"] = [decoded_jwt["user_id"]]
+            db.Recipes.insert_one(recipe)
             return "Recipe added succesfully", 200
     except TypeError:
         return make_response(jsonify(error="Invalid request body"), 400)
