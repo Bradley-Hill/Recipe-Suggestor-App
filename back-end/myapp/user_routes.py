@@ -9,7 +9,6 @@ from pymongo.errors import PyMongoError
 from html import escape
 from flask import current_app, request, jsonify, make_response
 from myapp import app
-import logging
 
 load_dotenv()
 secret_key = os.getenv("SECRET_KEY")
@@ -75,5 +74,4 @@ def login_user():
             else:
                 return make_response(jsonify(error="Invalid Password"), 401)
     except Exception as e:
-        logging.error(str(e))
         return make_response(jsonify(error=str(e)), 500)
