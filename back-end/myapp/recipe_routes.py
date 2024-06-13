@@ -79,15 +79,33 @@ def add_recipe():
 
 
 @app.route("/delete_recipe", methods=["DELETE"])
+@jwt.required()
 def delete_recipe():
     try:
+        user_id = get_jwt_identity()
+
         db = current_app.config["db"]
         recipe_id = request.json.get("_id")
         recipe_id = ObjectId(recipe_id)
-        result = db.Recipes.delete_one({"_id": recipe_id})
-        if result.deleted_count == 0:
+
+        recipe = db.Recipes.find_one({"_id": recipe_id})
+
+        if not recipe:
             return make_response(jsonify(error="No recipe found with that _id"), 404)
-        return "Recipe deleted successfully", 200
+        
+        if user_id not in recipe["users_added"]:
+            return make_response(jsonify(error="User did not add this recipe"), 403)
+        
+        if len(recipe["users_added"]) > 1:
+            db.Recipes.update_one(
+                {"_id": recipe_id},
+                {"$pull": {"users_added": user_id}}
+            )
+            return "Recipe removed from user's selection", 200
+        else:
+            result = db.Recipes.delete_one({"_id": recipe_id})
+            return "Recipe deleted successfully", 200
+
     except TypeError:
         return make_response(jsonify(error="Invalid request body"), 400)
     except InvalidId:
@@ -97,14 +115,17 @@ def delete_recipe():
 
 
 @app.route("/search", methods=["POST"])
+@jwt_required()
 def search_recipe():
     try:
+        user_id = get_jwt_identity()
+
         db = current_app.config["db"]
         # Parse teh request body
         ingredients = request.json["ingredients"]
         # create the query for MongoDB
-        #
-        query = {"$text": {"$search": " ".join(ingredients)}}
+        
+        query = {"$text": {"$search": " ".join(ingredients)},"users_added": user_id}
         # execute teh query
         cursor = db.Recipes.find(query)
         # List of recipes from query
