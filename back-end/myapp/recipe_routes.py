@@ -10,7 +10,6 @@ from recipe_scrapers import scrape_me
 
 # Local application imports
 from myapp import app
-import jwt
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
