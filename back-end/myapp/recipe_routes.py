@@ -11,6 +11,7 @@ from recipe_scrapers import scrape_me
 # Local application imports
 from myapp import app
 import jwt
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
 @app.route("/view_all", methods=["GET"])
@@ -28,20 +29,18 @@ def view_all():
 
 
 @app.route("/add", methods=["POST"])
+@jwt_required()
 def add_recipe():
     try:
-        if "Authorization" not in request.headers:
-            return make_response(jsonify(error="Missing Authorization header"), 401)
-        try:
-            decoded_jwt = jwt.decode(request.headers["Authorization"], current_app.config["SECRET_KEY"], algorithms=["HS256"])
-        except InvalidTokenError:
-            return make_response(jsonify(error="Invalid token"), 401)
-        except ExpiredSignatureError:
-            return make_response(jsonify(error="Token has expired"), 401)
+        # Get the user_id from the JWT
+        user_id = get_jwt_identity()
         
         db = current_app.config["db"]
         # Get URL from request body
         url = request.json.get("url")
+        # Check if url is a string
+        if not isinstance(url, str):
+            return make_response(jsonify(error="URL should be a string"), 400)
 
         # scrape the recipe
         scraper = scrape_me(url)
@@ -53,7 +52,7 @@ def add_recipe():
             "image_url": scraper.image(),
             "ingredients": scraper.ingredients(),
             "instructions": scraper.instructions().split("\n"),
-            "users_added": [decoded_jwt["username"]],
+            "users_added": [user_id],
         }
 
         # Check if recipe already exists
@@ -62,12 +61,12 @@ def add_recipe():
         if existing_recipe:
             db.Recipes.update_one(
                 {"_id": existing_recipe["_id"]},
-                {"$addToSet":{"users_added": decoded_jwt["user_id"]}}
+                {"$addToSet":{"users_added": user_id}}
             )
             return "User added to existing recipe", 200
         else:
             # Insert recipe to mongoDB collection
-            recipe["users_added"] = [decoded_jwt["user_id"]]
+            recipe["users_added"] = [user_id]
             db.Recipes.insert_one(recipe)
             return "Recipe added succesfully", 200
     except TypeError:

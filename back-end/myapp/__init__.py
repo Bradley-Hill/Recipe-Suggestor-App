@@ -3,6 +3,7 @@ from pymongo import MongoClient
 from pymongo import TEXT
 from flask_cors import CORS
 from dotenv import load_dotenv
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 import os
 
 load_dotenv()
@@ -10,6 +11,11 @@ load_dotenv()
 print("MongDB client init...")
 app = Flask(__name__)
 CORS(app)
+
+#Setting secret key for JWT here
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+
+jwt = JWTManager(app)
 
 mongo_connection_str = os.getenv("MONGO_CONNECTION_STR")
 client = MongoClient(mongo_connection_str)

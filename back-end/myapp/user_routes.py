@@ -3,12 +3,14 @@ import re
 import bcrypt
 import jwt
 import datetime
+import time
 import os
 from dotenv import load_dotenv
 from pymongo.errors import PyMongoError
 from html import escape
 from flask import current_app, request, jsonify, make_response
 from myapp import app
+from flask_jwt_extended import create_access_token
 
 load_dotenv()
 secret_key = os.getenv("SECRET_KEY")
@@ -66,10 +68,8 @@ def login_user():
             password = password.encode("utf-8")
             if bcrypt.checkpw(password, stored_password):
                 #Create JWT for user
-                token = jwt.encode({
-                    "user_id": str(user["_id"]),
-                    "expires": (datetime.datetime.utcnow() + datetime.timedelta(minutes=30)).isoformat()
-                },secret_key, algorithm="HS256")
+                expires = datetime.timedelta(minutes=30)
+                token = create_access_token(identity=str(user["_id"]), expires_delta=expires)
                 return make_response(jsonify(success="Logged In successfully", token=token), 200)
             else:
                 return make_response(jsonify(error="Invalid Password"), 401)
