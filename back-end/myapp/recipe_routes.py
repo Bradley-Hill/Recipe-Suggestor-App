@@ -79,7 +79,7 @@ def add_recipe():
 
 
 @app.route("/delete_recipe", methods=["DELETE"])
-@jwt.required()
+@jwt_required()
 def delete_recipe():
     try:
         user_id = get_jwt_identity()
