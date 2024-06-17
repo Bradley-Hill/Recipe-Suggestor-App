@@ -11,9 +11,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, ref, watchEffect } from 'vue'
 import DeleteRecipeButton from './appDeleteRecipeButton.vue'
 import type { Recipe } from '@/interfaces/Recipe'
+import {jwtDecode} from 'jwt-decode';
 
 export default defineComponent({
   name: 'appRecipeDisplayCard',
@@ -25,7 +26,9 @@ export default defineComponent({
     }
   },
   setup(props) {
+
     const typedRecipe = computed(() => props.recipe as Recipe)
+
     return { typedRecipe }
   }
 })
