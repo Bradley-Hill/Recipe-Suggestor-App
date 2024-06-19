@@ -38,7 +38,7 @@ export default defineComponent({
       if(token) {
         const decodedToken: any = jwtDecode(token)
         console.log("Decoded Token: ", decodedToken)
-        return typedRecipe.value.users_added.includes(decodedToken.user_id)
+        return typedRecipe.value.users_added.includes(decodedToken.sub)
       }
       return false
     })
