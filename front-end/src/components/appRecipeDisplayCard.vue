@@ -4,6 +4,7 @@
     <img :src="typedRecipe.image_url" alt="Recipe Image" />
     <!--  Add more structure for teh recipe info here -->
     <DeleteRecipeButton
+    v-if="isUserAdded"
       :recipeId="typedRecipe._id"
       @recipeDeleted="$emit('recipeDeleted', $event)"
     />
@@ -14,6 +15,7 @@
 import { defineComponent, computed} from 'vue'
 import DeleteRecipeButton from './appDeleteRecipeButton.vue'
 import type { Recipe } from '@/interfaces/Recipe'
+import {jwtDecode} from 'jwt-decode'
 
 
 export default defineComponent({
@@ -26,10 +28,24 @@ export default defineComponent({
     }
   },
   setup(props) {
-
+    
     const typedRecipe = computed(() => props.recipe as Recipe)
+    
+    console.log("Recipe props: ",props.recipe)
+    console.log("Users added: ", typedRecipe.value.users_added)
+    const isUserAdded = computed(()=>{
+      const token = localStorage.getItem('token')
+      if(token) {
+        const decodedToken: any = jwtDecode(token)
+        console.log("Decoded Token: ", decodedToken)
+        return typedRecipe.value.users_added.includes(decodedToken.user_id)
+      }
+      return false
+    })
 
-    return { typedRecipe }
+    console.log("Is user added: ", isUserAdded.value)
+
+    return { typedRecipe, isUserAdded }
   }
 })
 </script>
