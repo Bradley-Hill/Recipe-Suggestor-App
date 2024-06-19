@@ -4,13 +4,12 @@ from bson.errors import InvalidId
 
 # Third party imports
 from flask import current_app, request, jsonify, make_response
-from jwt import InvalidTokenError, ExpiredSignatureError
 from pymongo.errors import PyMongoError
 from recipe_scrapers import scrape_me
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 # Local application imports
 from myapp import app
-from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
 @app.route("/view_all", methods=["GET"])

@@ -11,10 +11,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, watchEffect } from 'vue'
+import { defineComponent, computed} from 'vue'
 import DeleteRecipeButton from './appDeleteRecipeButton.vue'
 import type { Recipe } from '@/interfaces/Recipe'
-import {jwtDecode} from 'jwt-decode';
+
 
 export default defineComponent({
   name: 'appRecipeDisplayCard',
