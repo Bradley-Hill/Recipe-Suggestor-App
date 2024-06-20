@@ -11,7 +11,7 @@ const routes = [
   { path: '/Login', component: LoginView },
   { path: '/SignUp', component: SignUpView },
   { path: '/Results', component: ResultsView, meta:{requiresAuth:true} },
-  { path: '/AddRecipe', component: AddRecipeView },
+  { path: '/AddRecipe', component: AddRecipeView, meta:{requiresAuth:true} },
   { path: '/ViewRecipes', component: ViewRecipesView }
 ]
 
