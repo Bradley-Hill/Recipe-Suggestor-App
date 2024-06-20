@@ -4,7 +4,7 @@
     <img :src="typedRecipe.image_url" alt="Recipe Image" />
     <!--  Add more structure for teh recipe info here -->
     <DeleteRecipeButton
-    v-if="isUserAdded"
+      v-if="isUserAdded"
       :recipeId="typedRecipe._id"
       @recipeDeleted="$emit('recipeDeleted', $event)"
     />
@@ -12,11 +12,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed} from 'vue'
+import { defineComponent, computed } from 'vue'
+
 import DeleteRecipeButton from './appDeleteRecipeButton.vue'
 import type { Recipe } from '@/interfaces/Recipe'
-import {jwtDecode} from 'jwt-decode'
-
+import { jwtDecode } from 'jwt-decode'
 
 export default defineComponent({
   name: 'appRecipeDisplayCard',
@@ -28,22 +28,32 @@ export default defineComponent({
     }
   },
   setup(props) {
-    
+
     const typedRecipe = computed(() => props.recipe as Recipe)
-    
-    console.log("Recipe props: ",props.recipe)
-    console.log("Users added: ", typedRecipe.value.users_added)
-    const isUserAdded = computed(()=>{
-      const token = localStorage.getItem('token')
-      if(token) {
-        const decodedToken: any = jwtDecode(token)
-        console.log("Decoded Token: ", decodedToken)
-        return typedRecipe.value.users_added.includes(decodedToken.sub)
+
+    const isUserAdded = computed(() => {
+      try {
+        const token = localStorage.getItem('token')
+        if (token) {
+          const decodedToken: any = jwtDecode(token)
+
+          const currentTimestamp = Math.floor(Date.now()/1000)
+          if(decodedToken.exp < currentTimestamp){
+            
+            return false
+          }
+
+          return typedRecipe.value.users_added.includes(decodedToken.sub)
+        }
+      } catch (error) {
+        console.error('Error decoding JWT: ', error)
+        //Token is Invalid, redirect user to login page.
       }
+
       return false
     })
 
-    console.log("Is user added: ", isUserAdded.value)
+
 
     return { typedRecipe, isUserAdded }
   }
