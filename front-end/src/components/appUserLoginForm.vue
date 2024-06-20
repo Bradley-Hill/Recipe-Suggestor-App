@@ -9,18 +9,21 @@
         </label>
         <button type="submit">Login</button>
     </fieldset>
+    <p>{{ loginMessage }}</p>
     </form>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
     data() {
         return {
             username: '',
             password: '',
+            loginMessage: "",
         }
     },
     methods: {
@@ -32,7 +35,11 @@ export default defineComponent({
                 });
                 if(response.data.success){
                     window.localStorage.setItem("token", response.data.token);
-                // Update the page to confirm the user is logged in
+                this.loginMessage = "Login Successful! Redirecting..."
+                const router = useRouter()
+                setTimeout(()=>{
+                    router.push("/ViewAll")
+                },2000)
                 } else {
                     console.error("Error: ", response.data.error)
                 }
@@ -83,5 +90,18 @@ button {
 
 button:hover {
   background-color: #0056b3;
+}
+
+p{
+    color: #4CAF50;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 1rem;
+    border: 1px solid #4CAF50;
+    border-radius: 5px;
+    margin-bottom: 1.2rem;
+    background-color: #e8f5e9;
+
 }
 </style>
