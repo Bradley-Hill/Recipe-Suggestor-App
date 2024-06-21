@@ -73,7 +73,7 @@ def add_recipe():
             # Insert recipe to mongoDB collection
             recipe["users_added"] = [user_id]
             db.Recipes.insert_one(recipe)
-            return "Recipe added succesfully", 200
+            return "Recipe added successfully", 200
     except TypeError:
         return make_response(jsonify(error="Invalid request body"), 400)
     except InvalidId:
