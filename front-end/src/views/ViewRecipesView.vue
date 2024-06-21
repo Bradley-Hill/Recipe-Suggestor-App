@@ -31,18 +31,17 @@ export default {
       this.recipes = this.recipes.filter((recipe) => recipe._id !== recipeId)
     }
   },
-  created() {
-    axios
-      .get(`${import.meta.env.VITE_VUE_APP_BASE_API_URL}/view_all`)
-      .then((response) => {
-        this.recipes = response.data
-        this.loading = false
-      })
-      .catch((error) => {
-        console.error(error)
-        this.loading = false
-      })
-  }
+  beforeRouteEnter(to,from,next){
+    axios.get(`${import.meta.env.VITE_VUE_APP_BASE_API_URL}/view_all`).then((response)=>{
+      next(componentInstance => {
+        componentInstance.recipes = response.data;
+        componentInstance.loading = false;
+      });
+    }).catch((error)=>{
+      console.error(error);
+      next(componentInstance=>componentInstance.loading = false)
+    })
+  },
 }
 </script>
 

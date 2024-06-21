@@ -9,7 +9,7 @@
         </label>
         <button type="submit">Login</button>
     </fieldset>
-    <p>{{ loginMessage }}</p>
+    <p v-if="loginMessage">{{ loginMessage }}</p>
     </form>
 </template>
 
@@ -38,7 +38,7 @@ export default defineComponent({
                 this.loginMessage = "Login Successful! Redirecting..."
                 const router = useRouter()
                 setTimeout(()=>{
-                    router.push("/ViewAll")
+                    this.$router.push("/ViewAll")
                 },2000)
                 } else {
                     console.error("Error: ", response.data.error)
