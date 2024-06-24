@@ -1,9 +1,9 @@
-from flask import Flask
+from flask import Flask, jsonify
 from pymongo import MongoClient
 from pymongo import TEXT
 from flask_cors import CORS
 from dotenv import load_dotenv
-from flask_jwt_extended import JWTManager
+from flask_jwt_extended import JWTManager, jwt_expired_token_loader
 import os
 
 load_dotenv()
@@ -16,6 +16,10 @@ CORS(app)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 
 jwt = JWTManager(app)
+
+@jwt.expired_token_loader
+def expired_token_callback(jwt_header,jwt_payload):
+    return jsonify({"message":"Token has expired"}), 401
 
 mongo_connection_str = os.getenv("MONGO_CONNECTION_STR")
 client = MongoClient(mongo_connection_str)
