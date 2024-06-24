@@ -3,7 +3,7 @@ from pymongo import MongoClient
 from pymongo import TEXT
 from flask_cors import CORS
 from dotenv import load_dotenv
-from flask_jwt_extended import JWTManager, jwt_expired_token_loader
+from flask_jwt_extended import JWTManager
 import os
 
 load_dotenv()

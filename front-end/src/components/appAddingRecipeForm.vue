@@ -10,6 +10,7 @@
 
 <script>
 import axios from 'axios'
+import {http} from "@/router/index"
 
 export default {
   data() {
@@ -17,7 +18,18 @@ export default {
       url: ''
     }
   },
+  created(){
+    this.checkExpiredToken()
+  },
   methods: {
+    async checkExpiredToken(){
+      try{
+        await http.get("/add")
+        console.log("Token is not Expired")
+      } catch (error){
+        console.error("Error verifying token expiration: ", error);
+      }
+    },
     async addRecipe() {
       console.log('addRecipe method called')
       try {
