@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import axios from 'axios';
 import HomeView from '@/views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import SignUpView from '@/views/SignUpView.vue'
@@ -20,6 +21,22 @@ const router = createRouter({
   routes
 })
 
+const http = axios.create({
+  baseURL: `${import.meta.env.VITE_VUE_APP_BASE_API_URL}`,
+});
+
+http.interceptors.response.use(response=>{
+  return response;
+}, error =>{
+  if(error.response.status === 401){
+    if(error.response.data.error === "Token has expired"){
+      localStorage.removeItem("token")
+      router.push("/Login")
+    }
+  }
+  return Promise.reject(error)
+})
+
 router.beforeEach((to,from,next) => {
   if(to.matched.some(record => record.meta.requiresAuth)){
     const token = localStorage.getItem("token")
@@ -33,4 +50,4 @@ router.beforeEach((to,from,next) => {
   }
 })
 
-export default router
+export  {router,http}

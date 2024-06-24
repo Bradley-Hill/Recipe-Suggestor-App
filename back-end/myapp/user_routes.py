@@ -72,6 +72,6 @@ def login_user():
                 token = create_access_token(identity=str(user["_id"]), expires_delta=expires)
                 return make_response(jsonify(success="Logged In successfully", token=token), 200)
             else:
-                return make_response(jsonify(error="Invalid Password"), 401)
+                return make_response(jsonify(error="Invalid Password"), 403)
     except Exception as e:
         return make_response(jsonify(error=str(e)), 500)
