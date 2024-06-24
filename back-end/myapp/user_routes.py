@@ -23,7 +23,7 @@ def create_user():
         email = request.json.get("email")
         password = request.json.get("password")
         confirm_password = request.json.get("confirmPassword")
-        #Trimming the whitespace and sanitising the input
+        #Trimming the whitespace and sanitizing the input
         username = escape(username.strip())
         email = escape(email.strip())
         password = escape(password.strip())
@@ -46,7 +46,7 @@ def create_user():
         password_hash = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
         # Inserting the User into MongDB
         result = db.Users.insert_one({"username": username, "email": email, "password": password_hash})
-        return "User created successfully", 200
+        return make_response(jsonify(message="User created successfully"), 200)
     except PyMongoError as e:
         return make_response(jsonify(error=str(e)), 500)
 

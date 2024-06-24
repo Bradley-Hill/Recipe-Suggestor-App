@@ -43,9 +43,11 @@
 </template>
 
 <script setup lang="ts">
+import type { ErrorResponse } from '@/interfaces/ErrorResponse';
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
+import { AxiosError } from 'axios';
 
 const username = ref('')
 const email = ref('')
@@ -109,12 +111,13 @@ const createUser = async () => {
       confirmPassword: confirmPassword.value
     })
 
-    if (response.status === 200) {
+    if (response.status === 200 && response.data.message) {
+      successMessage.value = response.data.message
       username.value = ''
       email.value = ''
       password.value = ''
       confirmPassword.value = ''
-      successMessage.value = 'User created successfully'
+      // Redirect after delay
       setTimeout(() => {
         router.push('/Login')
       }, 2000)
@@ -122,10 +125,18 @@ const createUser = async () => {
       successMessage.value = 'Failed to create new User'
     }
   } catch (error) {
-    console.error(error)
-  } finally {
-    isLoading.value = false
+  console.error(error);
+  // Type assertion to inform TypeScript about the error structure
+  const axiosError = error as AxiosError; // Assuming AxiosError is imported from 'axios'
+  if (axiosError.response && axiosError.response.data) {
+    const data: ErrorResponse=axiosError.response.data;
+    successMessage.value = data.message || 'An unknown error occurred';
+  } else {
+    successMessage.value = 'An unknown error occurred';
   }
+} finally {
+  isLoading.value = false;
+}
 }
 </script>
 
