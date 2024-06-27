@@ -6,6 +6,7 @@ import SignUpView from '@/views/SignUpView.vue'
 import ResultsView from '@/views/ResultsView.vue'
 import AddRecipeView from '@/views/AddRecipeView.vue'
 import ViewRecipesView from '@/views/ViewRecipesView.vue'
+import UserDashboard from "@/views/UserDashboard.vue"
 
 const routes = [
   { path: '/', component: HomeView },
@@ -13,7 +14,8 @@ const routes = [
   { path: '/SignUp', component: SignUpView },
   { path: '/Results', component: ResultsView, meta:{requiresAuth:true} },
   { path: '/AddRecipe', component: AddRecipeView, meta:{requiresAuth:true} },
-  { path: '/ViewRecipes', component: ViewRecipesView }
+  { path: '/ViewRecipes', component: ViewRecipesView },
+  { path: '/UserDashboard', component: UserDashboard, meta: {requiresAuth:true}}
 ]
 
 const router = createRouter({
