@@ -38,7 +38,7 @@ export default defineComponent({
                 this.loginMessage = "Login Successful! Redirecting..."
                 const router = useRouter()
                 setTimeout(()=>{
-                    this.$router.push("/ViewRecipes")
+                    this.$router.push("/UserDashboard")
                 },2000)
                 } else {
                     console.error("Error: ", response.data.error)

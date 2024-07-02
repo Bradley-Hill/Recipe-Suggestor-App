@@ -3,8 +3,8 @@ import axios from 'axios';
 import HomeView from '@/views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import SignUpView from '@/views/SignUpView.vue'
-import ResultsView from '@/views/ResultsView.vue'
-import AddRecipeView from '@/views/AddRecipeView.vue'
+// import ResultsView from '@/views/ResultsView.vue'
+// import AddRecipeView from '@/views/AddRecipeView.vue'
 import ViewRecipesView from '@/views/ViewRecipesView.vue'
 import UserDashboard from "@/views/UserDashboard.vue"
 
@@ -12,8 +12,8 @@ const routes = [
   { path: '/', component: HomeView },
   { path: '/Login', component: LoginView },
   { path: '/SignUp', component: SignUpView },
-  { path: '/Results', component: ResultsView, meta:{requiresAuth:true} },
-  { path: '/AddRecipe', component: AddRecipeView, meta:{requiresAuth:true} },
+  // { path: '/Results', component: ResultsView, meta:{requiresAuth:true} },
+  // { path: '/AddRecipe', component: AddRecipeView, meta:{requiresAuth:true} },
   { path: '/ViewRecipes', component: ViewRecipesView },
   { path: '/UserDashboard', component: UserDashboard, meta: {requiresAuth:true}}
 ]
