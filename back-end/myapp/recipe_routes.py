@@ -11,13 +11,6 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 # Local application imports
 from myapp import app
 
-# TODO:
-# The results/search only returns recipes from a users collection, as intended!
-# The delete button is only visible in view_all if teh recipe is associated with a  user
-# to be changed to be a button for adding a recipe into a users collection
-# add/create a dashboard for users to be redirected to after logging in displaying 
-# their recipes and teh add recipe functionality
-# Start testing suite for backend
 
 @app.route("/view_all", methods=["GET"])
 def view_all():
