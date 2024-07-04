@@ -8,11 +8,18 @@ from pymongo.errors import PyMongoError
 from recipe_scrapers import scrape_me
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
-# Local application imports
-from myapp import app
 
 
-@app.route("/view_all", methods=["GET"])
+
+def register_recipe_routes(app):
+    app.add_url_rule("/view_all", view_func=view_all, methods=["GET"])
+
+# wrap the routes in the jwt_required method
+    app.add_url_rule("/search", view_func=jwt_required()(search_recipe), methods=["POST"])
+    app.add_url_rule("/delete_recipe", view_func=jwt_required()(delete_recipe), methods=["DELETE"])
+    app.add_url_rule("/add", view_func=jwt_required()(add_recipe), methods=["POST"])
+
+
 def view_all():
     try:
 
@@ -26,8 +33,7 @@ def view_all():
         return make_response(jsonify(error=str(e)), 500)
 
 
-@app.route("/add", methods=["POST"])
-@jwt_required()
+
 def add_recipe():
     try:
         # Get the user_id from the JWT
@@ -77,8 +83,6 @@ def add_recipe():
     return "Recipe added successfully", 200
 
 
-@app.route("/delete_recipe", methods=["DELETE"])
-@jwt_required()
 def delete_recipe():
     try:
         user_id = get_jwt_identity()
@@ -113,8 +117,6 @@ def delete_recipe():
         return make_response(jsonify(error=str(e)), 500)
 
 
-@app.route("/search", methods=["POST"])
-@jwt_required()
 def search_recipe():
     try:
         user_id = get_jwt_identity()

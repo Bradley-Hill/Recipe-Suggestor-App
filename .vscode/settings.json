@@ -4,5 +4,8 @@
         "dotenv",
         "jsonify",
         "pymongo"
+    ],
+    "python.analysis.extraPaths": [
+        "./back-end/myapp"
     ]
 }

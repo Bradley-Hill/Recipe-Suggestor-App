@@ -4,6 +4,8 @@ from pymongo import TEXT
 from flask_cors import CORS
 from dotenv import load_dotenv
 from flask_jwt_extended import JWTManager
+from .recipe_routes import register_recipe_routes
+from .user_routes import register_user_routes
 import os
 
 def create_app(test_config=None):
@@ -34,5 +36,8 @@ def create_app(test_config=None):
 
     app.config["db"] = db
 
-    import myapp.recipe_routes
-    import myapp.user_routes
+    register_recipe_routes(app)
+    register_user_routes(app)
+
+    return app
+   
