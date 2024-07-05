@@ -1,6 +1,6 @@
 import pytest
 from flask import json, Flask, current_app
-from pymongo.errors import PyMongoError
+from pymongo.errors import PyMongoError, ExecutionTimeout
 from myapp import create_app
 from unittest.mock import patch, MagicMock
 from myapp.recipe_routes import view_all
@@ -52,3 +52,30 @@ def test_view_all_db_error(app):
             data = response.get_json()
             assert 'error' in data
             assert data['error'] == "Database connection error"
+
+def test_view_all_empty_database(app):
+    with app.app_context():
+        mock_db = app.config["db"]
+        mock_db.Recipes.find.return_value = []
+
+        response = view_all()
+        data = response.get_json()
+        assert data == [], "Expect an empty list when db is empty"
+
+def test_view_all_data_transformation(app):
+    with app.app_context():
+        response = view_all()
+        recipes = response.get_json()
+        for recipe in recipes:
+            assert isinstance(recipe['_id'],str),"The _id field must be a string"
+
+def test_view_all_server_timeout(app):
+    with app.app_context():
+        mock_db = app.config["db"]
+        with patch.object(mock_db.Recipes, 'find', side_effect=ExecutionTimeout("Timeout Error")):
+            response = view_all()
+
+            assert response.status_code == 500
+            data = response.get_json()
+            assert 'error' in data
+            assert "Timeout Error" in data['error']
