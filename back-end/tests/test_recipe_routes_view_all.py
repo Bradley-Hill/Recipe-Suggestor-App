@@ -11,8 +11,23 @@ def app():
     app.config['TESTING'] = True
     mock_db = MagicMock()
     mock_db.Recipes.find.return_value = [
-        {"_id": "507f1f77bcf86cd799439011", "name": "Test Recipe 1"},
-        {"_id": "507f1f77bcf86cd799439012", "name": "Test Recipe 2"}
+        {
+            "_id": "666ac26a5a941dae139ec173",
+            "name": "Feta & peach couscous",
+            "total_time": 20,
+            "image_url": "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/fe…",
+            "ingredients": ["Ingredient 1", "Ingredient 2", "Ingredient 3", "Ingredient 4"],
+            "instructions": ["Step 1: Do something"],
+            "users_added": ["User1"]
+        },
+        {"_id": "507f1f77bcf86cd799439012", 
+         "name": "Sausage and Mash",
+         "total_time":30,
+         "image_url":"https://images.immediate.co.uk/production/volatile/sites/30/2020/08/re…",
+         "ingredients":["Ingredient 1","Ingredient 2"],
+         "instructions":["Step 1: Do something"],
+         "users_added":["User2"]
+         }
     ]
     app.config["db"] = mock_db
     return app
@@ -27,4 +42,13 @@ def test_view_all_success(app):
             assert isinstance(recipe,dict)
             assert isinstance(recipe["_id"], str)
 
-    assert response.status_code == 200
+def test_view_all_db_error(app):
+    with app.app_context():
+        mock_db = app.config['db']
+        with patch.object(mock_db.Recipes, 'find',side_effect=PyMongoError("Database connection error")):
+            response = view_all()
+
+            assert response.status_code == 500
+            data = response.get_json()
+            assert 'error' in data
+            assert data['error'] == "Database connection error"
