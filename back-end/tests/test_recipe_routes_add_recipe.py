@@ -38,6 +38,21 @@ def app():
     mock_update_result.matched_count = 1
     mock_update_result.modified_count = 1
     mock_db.Recipes.update_one.return_value = mock_update_result
-    
+
     app.config["db"] = mock_db
     return app
+
+def test_add_recipe_success(app):
+    with app.test_client() as client:
+        data = {
+            "name": "Test Recipe",
+            "total_time": 10,
+            "image_url": "https://example.com/test_recipe.jpg",
+            "ingredients": ["Ingredient A", "Ingredient B"],
+            "instructions": ["Step 1: Do something"],
+            "users_added": ["User1"]
+        }
+        response = client.post('/add_recipe', json=data)
+
+        app.config["db"].Recipes.insert_one.assert_called_with(data)
+        assert response.status_code == 200
