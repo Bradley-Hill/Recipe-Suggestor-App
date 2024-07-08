@@ -29,5 +29,15 @@ def app():
          "users_added":["User2"]
          }
     ]
+
+    mock_insert_result = MagicMock()
+    mock_insert_result.inserted_id = "new_recipe_id"
+    mock_db.Recipes.insert_one.return_value = mock_insert_result
+
+    mock_update_result = MagicMock()
+    mock_update_result.matched_count = 1
+    mock_update_result.modified_count = 1
+    mock_db.Recipes.update_one.return_value = mock_update_result
+    
     app.config["db"] = mock_db
     return app
