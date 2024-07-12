@@ -1,36 +1,21 @@
 import pytest
 from flask import json, Flask, current_app
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, JWTManager,jwt_required
 from pymongo.errors import PyMongoError, ExecutionTimeout
+from dotenv import load_dotenv
+import os
 from myapp import create_app
 from unittest.mock import patch, MagicMock
 from myapp.recipe_routes import add_recipe
 
 @pytest.fixture
 def app():
+    load_dotenv()
     app = Flask(__name__)
     app.config['TESTING'] = True
+    app.config["JWT_SECRET_KEY"] = os.getenv("SECRET_KEY")
+    JWTManager(app)
     mock_db = MagicMock()
-
-    # mock_db.Recipes.find.return_value = [
-    #     {
-    #         "_id": "666ac26a5a941dae139ec173",
-    #         "name": "Feta & peach couscous",
-    #         "total_time": 20,
-    #         "image_url": "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/fe…",
-    #         "ingredients": ["Ingredient 1", "Ingredient 2", "Ingredient 3", "Ingredient 4"],
-    #         "instructions": ["Step 1: Do something"],
-    #         "users_added": ["User1"]
-    #     },
-    #     {"_id": "507f1f77bcf86cd799439012", 
-    #      "name": "Sausage and Mash",
-    #      "total_time":30,
-    #      "image_url":"https://images.immediate.co.uk/production/volatile/sites/30/2020/08/re…",
-    #      "ingredients":["Ingredient 1","Ingredient 2"],
-    #      "instructions":["Step 1: Do something"],
-    #      "users_added":["User2"]
-    #      }
-    # ]
 
     mock_insert_result = MagicMock()
     mock_insert_result.inserted_id = "new_recipe_id"

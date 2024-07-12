@@ -33,7 +33,7 @@ def view_all():
         return make_response(jsonify(error=str(e)), 500)
 
 
-
+@jwt_required()
 def add_recipe():
     try:
         # Get the user_id from the JWT
