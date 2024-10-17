@@ -27,7 +27,7 @@ The reasons for these choices are as follow:
 
 ## 🛠️ Install Dependencies    
 ```bash
-npm install package-name
+npm install
 ```
 
 
